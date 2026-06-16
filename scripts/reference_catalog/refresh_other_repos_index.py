@@ -48,22 +48,30 @@ GITHUB_API = "https://api.github.com"
 SEARCH_QUERIES: list[dict[str, str]] = [
     {"query": "oanda", "bucket": "oanda"},
     {"query": "oanda api", "bucket": "oanda"},
+    {"query": "oanda api python", "bucket": "oanda"},
     {"query": "oanda trading bot", "bucket": "oanda"},
     {"query": "oanda python", "bucket": "oanda"},
     {"query": "oanda v20", "bucket": "oanda"},
+    {"query": "oanda v20 python", "bucket": "oanda"},
+    {"query": "oanda backtest", "bucket": "oanda"},
+    {"query": "oanda data", "bucket": "oanda"},
+    {"query": "oanda wrapper", "bucket": "oanda"},
+    {"query": "oanda adapter", "bucket": "oanda"},
+    {"query": "oandapy", "bucket": "oanda"},
     {"query": "oanda strategy", "bucket": "oanda"},
+    {"query": "oanda dashboard", "bucket": "oanda"},
     {"query": "forex trading bot", "bucket": "forex"},
     {"query": "forex strategy", "bucket": "forex"},
     {"query": "forex trading system", "bucket": "forex"},
     {"query": "fx trading bot python", "bucket": "forex"},
+    {"query": "forex backtesting python", "bucket": "forex"},
+    {"query": "forex risk management", "bucket": "forex"},
     {"query": "algorithmic trading bot", "bucket": "general_trading"},
     {"query": "algorithmic trading framework", "bucket": "framework"},
     {"query": "trading strategy backtest", "bucket": "framework"},
-    {"query": "crypto trading bot", "bucket": "crypto"},
     {"query": "backtrader strategy", "bucket": "framework"},
     {"query": "vectorbt trading", "bucket": "framework"},
     {"query": "trade execution engine", "bucket": "framework"},
-    {"query": "freqtrade strategy", "bucket": "crypto"},
     {"query": "paper trading bot", "bucket": "ops"},
     {"query": "trading dashboard", "bucket": "ops"},
     {"query": "market data collector trading", "bucket": "data"},
@@ -289,6 +297,28 @@ def contains_any(text: str, terms: list[str]) -> bool:
     return any(term in text for term in terms)
 
 
+def has_forex_context(text: str) -> bool:
+    return contains_any(text, ["forex", "fx", "eurusd", "gbpusd", "usdjpy"])
+
+
+def has_generic_crypto_context(text: str) -> bool:
+    return contains_any(
+        text,
+        [
+            "crypto",
+            "cryptocurrency",
+            "bitcoin",
+            "ethereum",
+            "binance",
+            "ccxt",
+            "freqtrade",
+            "hummingbot",
+            "solana",
+            "coinbase",
+        ],
+    )
+
+
 def keyword_capabilities(text: str) -> list[str]:
     caps: list[str] = []
     for pattern, label in KEYWORD_CAPABILITIES:
@@ -319,6 +349,9 @@ def classify_bucket(text: str) -> str:
 
 def score_candidate(candidate: RepoCandidate, is_local: bool, existing_bonus: float = 0.0) -> float:
     text = build_text_blob(candidate)
+    is_oanda = "oanda" in text
+    is_forex = has_forex_context(text)
+    is_crypto = has_generic_crypto_context(text)
     score = float(candidate.score) * 10.0
     score += math.log10(candidate.stars + 1.0) * 18.0
     score += math.log10(candidate.forks + 1.0) * 5.0
@@ -328,14 +361,22 @@ def score_candidate(candidate: RepoCandidate, is_local: bool, existing_bonus: fl
         if pattern.search(text):
             score += 10.0
 
-    if "oanda" in text:
-        score += 55.0
+    if "oanda" in candidate.name.lower() or "oanda" in candidate.full_name.lower():
+        score += 45.0
+    if "oanda" in candidate.description.lower():
+        score += 30.0
+    if "oanda" in candidate.bucket_hits:
+        score += 25.0
+    if is_oanda:
+        score += 85.0
         if contains_any(text, ["api", "sdk", "v20", "rest", "client", "wrapper", "adapter", "library"]):
-            score += 18.0
+            score += 32.0
         if contains_any(text, ["account", "instrument", "order", "pricing", "trade", "transaction", "position", "candle", "candles"]):
-            score += 14.0
-    if contains_any(text, ["forex", "fx"]):
-        score += 24.0
+            score += 24.0
+        if contains_any(text, ["dashboard", "monitor", "backtest", "data", "strategy", "bot"]):
+            score += 18.0
+    if is_forex:
+        score += 34.0
     if "trading" in text:
         score += 16.0
     if "bot" in text:
@@ -360,6 +401,12 @@ def score_candidate(candidate: RepoCandidate, is_local: bool, existing_bonus: fl
         score += 10.0
     if contains_any(text, ["report", "research", "analysis", "experiment", "journal"]):
         score += 10.0
+    if is_crypto and not is_oanda and not is_forex:
+        score -= 85.0
+    elif is_crypto and not is_oanda:
+        score -= 35.0
+    if "crypto" in candidate.bucket_hits and not is_oanda and not is_forex:
+        score -= 45.0
     if is_local:
         score += 40.0
     if candidate.fork:

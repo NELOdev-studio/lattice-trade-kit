@@ -34,6 +34,7 @@ data/*
 *.sqlite3
 *.db
 *.log
+docs/project_description.pdf
 
 # OS / editor noise
 .DS_Store

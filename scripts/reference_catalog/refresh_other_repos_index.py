@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Refresh the structured reference index for `other_repos/`.
+"""Refresh the structured reference snapshot for `other_repos/`.
 
 The script searches GitHub for trading bot, strategy, broker, backtest, and
 market-data projects, merges those discoveries with any existing local
-reference entries already captured in `other_repos/index.json`, and writes a
-single consolidated catalog.
+reference entries already captured in
+`reference_catalog_repo/sources/other_repos/raw_index.json`, and writes a
+single consolidated raw snapshot.
 
 The generated catalog is designed to be easy for AI agents to consume:
 
@@ -35,7 +36,9 @@ from urllib.request import Request, urlopen
 
 WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
 OTHER_REPOS_DIR = WORKSPACE_ROOT / "other_repos"
-INDEX_PATH = OTHER_REPOS_DIR / "index.json"
+CATALOG_REPO_DIR = WORKSPACE_ROOT / "reference_catalog_repo"
+OTHER_REPOS_SOURCE_DIR = CATALOG_REPO_DIR / "sources" / "other_repos"
+INDEX_PATH = OTHER_REPOS_SOURCE_DIR / "raw_index.json"
 DEFAULT_MAX_PROJECTS = 100
 DEFAULT_SEARCH_LIMIT = 100
 DEFAULT_README_LIMIT = 12
@@ -159,7 +162,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         "--output",
         type=Path,
         default=INDEX_PATH,
-        help="Path to the JSON catalog to write.",
+        help="Path to the raw snapshot JSON to write.",
     )
     parser.add_argument(
         "--max-projects",
@@ -193,7 +196,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument(
         "--offline",
         action="store_true",
-        help="Skip GitHub search and rebuild the catalog from the existing index only.",
+        help="Skip GitHub search and rebuild the raw snapshot from the existing raw index only.",
     )
     return parser.parse_args(argv)
 
@@ -504,7 +507,7 @@ def build_catalog_from_existing(existing_index: dict[str, Any], args: argparse.N
         "generated_at": time.strftime("%Y-%m-%d"),
         "workspace_root": str(WORKSPACE_ROOT),
         "purpose": "High-signal summary of trading, bot, framework, and OANDA-related reference repositories for AI agents.",
-        "scope": "Local snapshot under other_repos/",
+        "scope": "Raw snapshot under reference_catalog_repo/sources/other_repos/",
         "source": {
             "type": source_label,
             "queries": [],
@@ -883,7 +886,7 @@ def build_catalog(args: argparse.Namespace) -> dict[str, Any]:
         "generated_at": time.strftime("%Y-%m-%d"),
         "workspace_root": str(WORKSPACE_ROOT),
         "purpose": "High-signal summary of trading, bot, framework, and OANDA-related reference repositories for AI agents.",
-        "scope": "Local snapshot under other_repos/",
+        "scope": "Raw snapshot under reference_catalog_repo/sources/other_repos/",
         "source": {
             "type": "github_search_api",
             "queries": SEARCH_QUERIES,

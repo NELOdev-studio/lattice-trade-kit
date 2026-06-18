@@ -20,6 +20,9 @@ Work inside `tradecore/` unless the user explicitly asks you to operate elsewher
 - Runtime code belongs in `src/tradecore/`.
 - UI entrypoints belong in `apps/dashboard/`.
 - Shared docs belong in `docs/`.
+- Generated GitHub issue mirrors belong in `docs/dev/issues/mirrored_from_github/`.
+- Local-only issue drafts belong in `docs/dev/issues/drafts/`.
+- Raw issue sync snapshots and sync state belong in `docs/dev/issues/_source/`.
 - Extracted notes and comparisons belong in `research/`.
 - Generated data belongs in `data/` and should stay out of version control.
 - Raw AI-generated reports, private strategy drafts, and unreleased analysis belong in `../tradecore-private/`.
@@ -30,3 +33,4 @@ Work inside `tradecore/` unless the user explicitly asks you to operate elsewher
 - Prefer small, focused modules.
 - Update the docs when the architecture changes.
 - Record useful ideas from reference projects in `research/notes/` instead of mixing them into the product code immediately.
+- Do not hand-edit generated issue mirrors; regenerate them from the raw `_source/` snapshots instead.

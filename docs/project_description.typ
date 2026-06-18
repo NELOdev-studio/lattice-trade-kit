@@ -1,5 +1,5 @@
 #set document(
-  title: [TradeCore project description and objectives],
+  title: [Lattice Trade Kit project description and objectives],
 )
 
 #title()
@@ -7,7 +7,7 @@
 #outline()
 
 = Overview
-TradeCore is a modular Python trading system centered on the OANDA API. The project aims to build a paper-first trading bot that can analyze market conditions, evaluate strategies, manage risk, and execute trades through a cleanly separated broker adapter layer.
+Lattice Trade Kit is a modular Python trading system centered on the OANDA API. The project aims to build a paper-first trading bot that can analyze market conditions, evaluate strategies, manage risk, and execute trades through a cleanly separated broker adapter layer.
 
 = Project Goals
 
@@ -56,18 +56,17 @@ Longer-term extensions may include:
 
 = Initial Module Map
 
-- `src/tradecore/adapters/oanda/` for the OANDA integration layer
-- `src/tradecore/core/` for core domain types and orchestration primitives
-- `src/tradecore/market_data/` for data ingestion and market-state handling
-- `src/tradecore/strategies/` for strategy implementations
-- `src/tradecore/risk/` for position sizing and safety checks
-- `src/tradecore/execution/` for order placement and trade lifecycle handling
-- `src/tradecore/monitoring/` for logs, metrics, and runtime status
-- `src/tradecore/ui/` for reusable UI helpers
+- `src/lattice_trade_kit/adapters/oanda/` for the OANDA integration layer
+- `src/lattice_trade_kit/core/` for core domain types and orchestration primitives
+- `src/lattice_trade_kit/market_data/` for data ingestion and market-state handling
+- `src/lattice_trade_kit/strategies/` for strategy implementations
+- `src/lattice_trade_kit/risk/` for position sizing and safety checks
+- `src/lattice_trade_kit/execution/` for order placement and trade lifecycle handling
+- `src/lattice_trade_kit/monitoring/` for logs, metrics, and runtime status
+- `src/lattice_trade_kit/ui/` for reusable UI helpers
 - `apps/dashboard/` for the user-facing GUI
 - `research/` for public-safe notes, comparisons, and source snippets
 - `docs/reports/published/` for cleaned reports safe to share in the public repo
 
 = Working With Reference Material
-The workspace contains external reference projects and vendor sources. Useful patterns can be adapted after review, but production code should be written to fit TradeCore's architecture and licensing requirements.
-
+The workspace contains external reference projects and vendor sources. Useful patterns can be adapted after review, but production code should be written to fit Lattice Trade Kit's architecture and licensing requirements.

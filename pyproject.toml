@@ -1,18 +1,26 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
 
-[project]
-name = "tradecore"
+[tool.poetry]
+name = "lattice-trade-kit"
 version = "0.1.0"
 description = "Modular OANDA trading system with strategy, risk, execution, monitoring, and dashboard layers."
 readme = "README.md"
-requires-python = ">=3.11"
-dependencies = []
+packages = [{ include = "lattice_trade_kit", from = "src" }]
 
-[tool.setuptools]
-package-dir = {"" = "src"}
+[tool.poetry.dependencies]
+python = ">=3.12,<3.14"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3"
+pytest-cov = "^5.0"
+ruff = "^0.6"
+pre-commit = "^3.8"
 
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.6"
+mkdocs-material = "^9.5"
+
+[tool.poetry.group.dashboard.dependencies]
+Django = ">=5.2,<5.3"

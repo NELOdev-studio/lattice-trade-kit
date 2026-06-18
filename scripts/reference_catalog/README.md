@@ -6,7 +6,7 @@ in `../../reference_catalog_repo/sources/other_repos/raw_index.json`.
 ## Refresh the catalog
 
 ```bash
-python3 tradecore/scripts/reference_catalog/refresh_other_repos_index.py
+python3 lattice-trade-kit/scripts/reference_catalog/refresh_other_repos_index.py
 ```
 
 Then rebuild the compact catalog repo:

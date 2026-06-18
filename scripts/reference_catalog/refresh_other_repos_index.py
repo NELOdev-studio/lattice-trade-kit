@@ -11,7 +11,7 @@ The generated catalog is designed to be easy for AI agents to consume:
 
 - compact but structured metadata
 - a small set of canonical capability tags
-- explicit notes about how each project may help TradeCore
+- explicit notes about how each project may help Lattice Trade Kit
 - optional local-clone awareness, so deep inspection stays cheap
 
 The script uses only the Python standard library.
@@ -100,20 +100,20 @@ KEYWORD_CAPABILITIES: list[tuple[re.Pattern[str], str]] = [
 
 TRADECORE_NOTE_MAP: dict[str, list[str]] = {
     "oanda": [
-        "Use as an OANDA adapter or request/response naming reference for `src/tradecore/adapters/oanda/`.",
+        "Use as an OANDA adapter or request/response naming reference for `src/lattice_trade_kit/adapters/oanda/`.",
         "Good for checking broker-domain boundaries around accounts, prices, orders, trades, and transactions.",
     ],
     "forex": [
         "Useful for forex-specific strategy, session, and pair-selection ideas.",
-        "Can inform risk gates, indicator tuning, or multi-pair orchestration in `tradecore/strategies/`.",
+        "Can inform risk gates, indicator tuning, or multi-pair orchestration in `lattice-trade-kit/strategies/`.",
     ],
     "crypto": [
         "Useful for execution, signals, and lifecycle patterns even if the broker differs from OANDA.",
-        "Can inspire live monitoring or automation patterns for `tradecore-private/` experiments.",
+        "Can inspire live monitoring or automation patterns for `lattice-trade-kit-private/` experiments.",
     ],
     "framework": [
         "Useful for architecture ideas around backtesting, execution, and pluggable strategy boundaries.",
-        "Can help shape `core/`, `strategies/`, `risk/`, and `execution/` seams in TradeCore.",
+        "Can help shape `core/`, `strategies/`, `risk/`, and `execution/` seams in Lattice Trade Kit.",
     ],
     "ops": [
         "Useful for operator control, paper-trading, alerting, or execution supervision patterns.",
@@ -133,7 +133,7 @@ TRADECORE_NOTE_MAP: dict[str, list[str]] = {
     ],
     "general": [
         "Useful as a broad algorithmic-trading reference.",
-        "Worth mining for small architectural or operational patterns that fit TradeCore.",
+        "Worth mining for small architectural or operational patterns that fit Lattice Trade Kit.",
     ],
 }
 
@@ -241,7 +241,7 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
 def http_get_json(url: str, token: str | None = None) -> dict[str, Any]:
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "tradecore-reference-catalog/1.0",
+        "User-Agent": "lattice-trade-kit-reference-catalog/1.0",
         "X-GitHub-Api-Version": "2022-11-28",
     }
     if token:
